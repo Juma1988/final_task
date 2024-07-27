@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+enum PrefixType { none, username, email, password }
 
 class AppTextField extends StatefulWidget {
   final String? hint;
   final String label;
-  final bool isPassword;
-  final Container;
+  final bool isPassword, isFormatter;
+  final TextEditingController? controller;
   final TextInputType? keyboardType;
   final int maxLines;
+  final PrefixType prefixType;
+  final TextStyle? style;
 
   const AppTextField({
     super.key,
@@ -14,8 +19,11 @@ class AppTextField extends StatefulWidget {
     this.isPassword = false,
     this.keyboardType,
     this.hint,
-    this.Container,
+    this.controller,
     this.maxLines = 1,
+    this.prefixType = PrefixType.none,
+    this.isFormatter = false,
+    this.style,
   });
 
   @override
@@ -27,7 +35,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
@@ -65,8 +73,29 @@ class _AppTextFieldState extends State<AppTextField> {
               )
             : null,
         enabled: true,
+        prefixIcon: _buildPrefixIcon(),
       ),
-      controller: widget.Container,
+      controller: widget.controller,
+      inputFormatters: widget.isFormatter
+          ? [
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'[a-zA-Z0-9@#$%^&*(),.?":{}|<>]')),
+              LengthLimitingTextInputFormatter(20),
+            ]
+          : null,
     );
+  }
+
+  Widget? _buildPrefixIcon() {
+    switch (widget.prefixType) {
+      case PrefixType.username:
+        return Icon(Icons.person);
+      case PrefixType.email:
+        return Icon(Icons.email);
+      case PrefixType.password:
+        return Icon(Icons.lock);
+      case PrefixType.none:
+        return null;
+    }
   }
 }

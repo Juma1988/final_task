@@ -3,13 +3,23 @@ import 'package:flutter/material.dart';
 class AppButton extends StatelessWidget {
   final VoidCallback? onPress;
   final String label;
-  final bool isOutlined;
+  final bool isOutlined, isOutLineWidth;
+  final double borderRadius, outLineWidth, fontSize;
+  final Color outLineColor, fontColor;
+  final FontWeight fontWeight;
 
   const AppButton({
     Key? key,
     required this.label,
     this.isOutlined = false,
     this.onPress = null,
+    this.borderRadius = 8.0,
+    this.outLineWidth = 0.0,
+    this.outLineColor = Colors.black,
+    this.isOutLineWidth = false,
+    this.fontColor = Colors.black,
+    this.fontSize = 16,
+    this.fontWeight = FontWeight.w600,
   }) : super(key: key);
 
   @override
@@ -18,9 +28,14 @@ class AppButton extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         minimumSize: Size(double.infinity, 50),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
-        side: BorderSide(color: Theme.of(context).colorScheme.primary),
+        side: isOutLineWidth
+            ? BorderSide(
+                color: outLineColor,
+                width: outLineWidth,
+              )
+            : null,
         backgroundColor: isOutlined
             ? Colors.transparent
             : Theme.of(context).colorScheme.primary,
@@ -31,7 +46,11 @@ class AppButton extends StatelessWidget {
       onPressed: onPress ?? () {},
       child: Text(
         label,
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(
+          color: fontColor,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+        ),
       ),
     );
   }

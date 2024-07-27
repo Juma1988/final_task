@@ -112,7 +112,7 @@ class _OnBoardingView2State extends State<OnBoardingView2> {
                   currentIndex = 2;
                 });
               },
-              child: Text('Skip'))
+              child: Text('Skip',style: TextStyle(color: Colors.black),))
         ],
       ),
       body: PageView.builder(
@@ -125,71 +125,64 @@ class _OnBoardingView2State extends State<OnBoardingView2> {
         },
         itemBuilder: (context, index) {
           return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              AppImage(images[index]),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                height: 10.0,
+                child: ListView.builder(
+                  itemCount: 3,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (_, i) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 3.0),
+                          width: currentIndex == i ? 25.0 : 5.0,
+                          height: 8.0,
+                          decoration: BoxDecoration(
+                            color: currentIndex == i
+                                ? Color(0xFF3367fe)
+                                : Color(0xFFadc8ff),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ),
+              titles[index],
+              Text(
+                descriptions[index],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16.0,
+                  color: Colors.grey[600],
+                ),
+              ),
+              FilledButton(
+                onPressed: () {
+                  if (currentIndex < 2) {
+                    pageController.nextPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  } else {
+                    //todo
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AppImage(images[index]),
-                    Container(
-                      height: 10.0,
-                      child: ListView.builder(
-                        itemCount: 3,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (_, i) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 3.0),
-                                width: currentIndex == i ? 25.0 : 5.0,
-                                height: 8.0,
-                                decoration: BoxDecoration(
-                                  color: currentIndex == i
-                                      ? Color(0xFF3367fe)
-                                      : Color(0xFFadc8ff),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    titles[index],
-                    Text(
-                      descriptions[index],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16.0,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    FilledButton(
-                      onPressed: () {
-                        if (currentIndex < 2) {
-                          pageController.nextPage(
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        } else {
-                          //todo
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(currentIndex == 2 ? 'Get Started' : 'Next'),
-                          Icon(Icons.navigate_next_sharp),
-                        ],
-                      ),
-                    )
+                    Text(currentIndex == 2 ? 'Get Started' : 'Next'),
+                    Icon(Icons.navigate_next_sharp),
                   ],
                 ),
-              )
+              ),
             ],
           );
         },
